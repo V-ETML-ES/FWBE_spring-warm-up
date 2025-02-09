@@ -1,4 +1,4 @@
-# Exam training
+# Spring-warm-up training
 
 This repository has been created as a learning tool for getting to grips with spring boot.
 
