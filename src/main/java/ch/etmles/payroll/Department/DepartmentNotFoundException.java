@@ -1,4 +1,4 @@
-package ch.etmles.payroll.Controllers;
+package ch.etmles.payroll.Department;
 
 public class DepartmentNotFoundException extends RuntimeException {
     DepartmentNotFoundException(Long id){

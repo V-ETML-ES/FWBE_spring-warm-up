@@ -1,6 +1,9 @@
 package ch.etmles.payroll.Repositories;
 
-import ch.etmles.payroll.Entities.Employee;
+import ch.etmles.payroll.Department.Department;
+import ch.etmles.payroll.Department.DepartmentRepository;
+import ch.etmles.payroll.Employee.Employee;
+import ch.etmles.payroll.Employee.EmployeeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -12,10 +15,27 @@ public class LoadDatabase {
     private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);
 
     @Bean
-    CommandLineRunner initDatabase(EmployeeRepository repository){
+    CommandLineRunner initDatabase(DepartmentRepository departmentRepository, EmployeeRepository employeeRepository){
         return args->{
-            log.info("Preloading " + repository.save(new Employee("Bilbo Baggins", "burglar")));
-            log.info("Preloading " + repository.save(new Employee("Frodo Baggins", "thief")));
+            // Création des départements
+            Department itDepartment = new Department("Informatique");
+            Department hrDepartment = new Department("Ressources Humaines");
+
+            departmentRepository.save(itDepartment);
+            departmentRepository.save(hrDepartment);
+
+            log.info("Preloading " + itDepartment);
+            log.info("Preloading " + hrDepartment);
+
+            // Ajout des employés aux départements
+            Employee bilbo = new Employee("test@gmail.com", "Bilbo", "Baggins", "burglar", itDepartment);
+            Employee frodo = new Employee("abasd@outlook.com", "Frodo", "Baggins", "thief", hrDepartment);
+
+            employeeRepository.save(bilbo);
+            employeeRepository.save(frodo);
+
+            log.info("Preloading " + bilbo);
+            log.info("Preloading " + frodo);
         };
     }
 }

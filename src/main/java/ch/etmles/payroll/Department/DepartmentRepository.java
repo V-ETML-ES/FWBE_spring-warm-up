@@ -1,6 +1,5 @@
-package ch.etmles.payroll.Repositories;
+package ch.etmles.payroll.Department;
 
-import ch.etmles.payroll.Entities.Department;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface DepartmentRepository extends JpaRepository<Department, Long> {

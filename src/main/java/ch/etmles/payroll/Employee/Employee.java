@@ -1,5 +1,6 @@
-package ch.etmles.payroll.Entities;
+package ch.etmles.payroll.Employee;
 
+import ch.etmles.payroll.Department.Department;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
@@ -10,6 +11,8 @@ public class Employee {
 
     private @Id
     @GeneratedValue Long id;
+    @Column(nullable = false, unique = true)
+    private String email;
     private String name;
     private String firstname;
     private String role;
@@ -21,7 +24,8 @@ public class Employee {
 
     public Employee(){}
 
-    public Employee(String name, String firstname, String role, Department department) {
+    public Employee(String email, String name, String firstname, String role, Department department) {
+        this.setEmail(email);
         this.setName(name);
         this.setFirstname(firstname);
         this.setRole(role);
@@ -34,6 +38,14 @@ public class Employee {
 
     public void setId(Long id){
         this.id = id;
+    }
+
+    public String getEmail(){
+        return this.email;
+    }
+
+    public void setEmail(String email){
+        this.email = email;
     }
 
     public String getName(){
@@ -75,6 +87,7 @@ public class Employee {
         if(!(o instanceof Employee employee))
             return false;
         return Objects.equals(this.id, employee.id)
+                && Objects.equals(this.email, employee.email)
                 && Objects.equals(this.name, employee.name)
                 && Objects.equals(this.firstname, employee.firstname)
                 && Objects.equals(this.role, employee.role);
@@ -82,11 +95,11 @@ public class Employee {
 
     @Override
     public int hashCode(){
-        return Objects.hash(this.id, this.name, this.role);
+        return Objects.hash(this.id, this.email, this.name, this.firstname, this.role);
     }
 
     @Override
     public String toString(){
-        return "Employee{" + "id=" + this.getID() + ", name='" + this.getName() + '\'' + ", firstname='" + this.getFirstName() + '\'' + ", role='" + this.getRole() + '\'' + '}';
+        return "Employee{" + "id=" + this.getID() + ", email='" + this.getEmail() + '\'' + ", name='" + this.getName() + '\'' + ", firstname='" + this.getFirstName() + '\'' + ", role='" + this.getRole() + '\'' + '}';
     }
 }

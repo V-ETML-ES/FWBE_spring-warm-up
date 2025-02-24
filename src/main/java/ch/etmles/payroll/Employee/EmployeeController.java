@@ -1,7 +1,5 @@
-package ch.etmles.payroll.Controllers;
+package ch.etmles.payroll.Employee;
 
-import ch.etmles.payroll.Entities.Employee;
-import ch.etmles.payroll.Repositories.EmployeeRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -51,6 +49,7 @@ public class EmployeeController {
     Employee replaceEmployee(@PathVariable Long id, @RequestBody Employee updatedEmployee) {
         return repository.findById(id)
                 .map(employee -> {
+                    employee.setEmail(updatedEmployee.getEmail());
                     employee.setName(updatedEmployee.getName());
                     employee.setFirstname(updatedEmployee.getFirstName());
                     employee.setRole(updatedEmployee.getRole());

@@ -1,7 +1,5 @@
-package ch.etmles.payroll.Controllers;
+package ch.etmles.payroll.Department;
 
-import ch.etmles.payroll.Entities.Department;
-import ch.etmles.payroll.Repositories.DepartmentRepository;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
