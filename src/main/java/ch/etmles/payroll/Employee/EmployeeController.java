@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/employees")
 public class EmployeeController {
-
     private final EmployeeRepository repository;
 
     EmployeeController(EmployeeRepository repository){
@@ -18,7 +18,7 @@ public class EmployeeController {
     /* curl sample :
     curl -i localhost:8080/employees
     */
-    @GetMapping("/employees")
+    @GetMapping
     List<Employee> all(){
         return repository.findAll();
     }
@@ -28,7 +28,7 @@ public class EmployeeController {
         -H "Content-type:application/json" ^
         -d "{\"name\": \"Russel George\", \"role\": \"gardener\"}"
     */
-    @PostMapping("/employees")
+    @PostMapping
     Employee newEmployee(@RequestBody Employee newEmployee){
         return repository.save(newEmployee);
     }
@@ -36,7 +36,7 @@ public class EmployeeController {
     /* curl sample :
     curl -i localhost:8080/employees/1
     */
-    @GetMapping("/employees/{id}")
+    @GetMapping("/{id}")
     Employee one(@PathVariable Long id){
         return repository.findById(id)
                 .orElseThrow(() -> new EmployeeNotFoundException(id));
@@ -47,25 +47,27 @@ public class EmployeeController {
         -H "Content-type:application/json" ^
         -d "{\"name\": \"Samwise Bing\", \"role\": \"peer-to-peer\"}"
      */
-    @PutMapping("/employees/{id}")
-    Employee replaceEmployee(@RequestBody Employee newEmployee, @PathVariable Long id) {
+    @PutMapping("/{id}")
+    Employee replaceEmployee(@PathVariable Long id, @RequestBody Employee updatedEmployee) {
         return repository.findById(id)
                 .map(employee -> {
-                    employee.setName(newEmployee.getName());
-                    employee.setRole(newEmployee.getRole());
+                    employee.setName(updatedEmployee.getName());
+                    employee.setFirstname(updatedEmployee.getFirstName());
+                    employee.setRole(updatedEmployee.getRole());
                     return repository.save(employee);
                 })
                 .orElseGet(() -> {
-                    newEmployee.setId(id);
-                    return repository.save(newEmployee);
+                    updatedEmployee.setId(id);
+                    return repository.save(updatedEmployee);
                 });
     }
 
     /* curl sample :
     curl -i -X DELETE localhost:8080/employees/2
     */
-    @DeleteMapping("/employees/{id}")
-    void deleteEmployee(@PathVariable Long id){
+    @DeleteMapping("/{id}")
+    void deleteEmployee(@PathVariable Long id) {
+        if(!repository.existsById(id)) throw new EmployeeNotFoundException(id);
         repository.deleteById(id);
     }
 }
