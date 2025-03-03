@@ -13,38 +13,22 @@ public class EmployeeController {
         this.repository = repository;
     }
 
-    /* curl sample :
-    curl -i localhost:8080/employees
-    */
     @GetMapping
     List<Employee> all(){
         return repository.findAll();
     }
 
-    /* curl sample :
-    curl -i -X POST localhost:8080/employees ^
-        -H "Content-type:application/json" ^
-        -d "{\"name\": \"Russel George\", \"role\": \"gardener\"}"
-    */
     @PostMapping
     Employee newEmployee(@RequestBody Employee newEmployee){
         return repository.save(newEmployee);
     }
 
-    /* curl sample :
-    curl -i localhost:8080/employees/1
-    */
     @GetMapping("/{id}")
     Employee one(@PathVariable Long id){
         return repository.findById(id)
                 .orElseThrow(() -> new EmployeeNotFoundException(id));
     }
 
-    /* curl sample :
-    curl -i -X PUT localhost:8080/employees/2 ^
-        -H "Content-type:application/json" ^
-        -d "{\"name\": \"Samwise Bing\", \"role\": \"peer-to-peer\"}"
-     */
     @PutMapping("/{id}")
     Employee replaceEmployee(@PathVariable Long id, @RequestBody Employee updatedEmployee) {
         return repository.findById(id)
@@ -53,6 +37,7 @@ public class EmployeeController {
                     employee.setName(updatedEmployee.getName());
                     employee.setFirstname(updatedEmployee.getFirstName());
                     employee.setRole(updatedEmployee.getRole());
+                    employee.setDepartment(updatedEmployee.getDepartment());
                     return repository.save(employee);
                 })
                 .orElseGet(() -> {
@@ -61,9 +46,20 @@ public class EmployeeController {
                 });
     }
 
-    /* curl sample :
-    curl -i -X DELETE localhost:8080/employees/2
-    */
+    @PatchMapping("/{id}")
+    Employee modifyEmployee(@PathVariable Long id, @RequestBody Employee updatedEmployee){
+        if(!repository.existsById(id)) throw new EmployeeNotFoundException(id);
+
+        return repository.findById(id).map(employee -> {
+            if (updatedEmployee.getName() != null) employee.setName(updatedEmployee.getName());
+            if (updatedEmployee.getEmail() != null) employee.setEmail(updatedEmployee.getEmail());
+            if (updatedEmployee.getFirstName() != null) employee.setFirstname(updatedEmployee.getFirstName());
+            if (updatedEmployee.getRole() != null) employee.setRole(updatedEmployee.getRole());
+            if (updatedEmployee.getDepartment() != null) employee.setDepartment(updatedEmployee.getDepartment());
+            return repository.save(employee);
+        }).orElseThrow(() -> new EmployeeNotFoundException(id));
+    }
+
     @DeleteMapping("/{id}")
     void deleteEmployee(@PathVariable Long id) {
         if(!repository.existsById(id)) throw new EmployeeNotFoundException(id);
