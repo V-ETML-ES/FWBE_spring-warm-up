@@ -32,7 +32,7 @@ public class Employee {
         this.setDepartment(department);
     }
 
-    public Long getID(){
+    public Long getId(){
         return this.id;
     }
 
@@ -100,6 +100,6 @@ public class Employee {
 
     @Override
     public String toString(){
-        return "Employee{" + "id=" + this.getID() + ", email='" + this.getEmail() + '\'' + ", name='" + this.getName() + '\'' + ", firstname='" + this.getFirstName() + '\'' + ", role='" + this.getRole() + '\'' + '}';
+        return "Employee{" + "id=" + this.getId() + ", email='" + this.getEmail() + '\'' + ", name='" + this.getName() + '\'' + ", firstname='" + this.getFirstName() + '\'' + ", role='" + this.getRole() + '\'' + '}';
     }
 }
